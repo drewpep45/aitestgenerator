@@ -5,10 +5,6 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
-  }
-
   try {
     const { text } = req.body;
 
@@ -17,18 +13,17 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "user",
-          content: `Create 5 clear test questions based on this text:\n\n${text}`,
+          content: `Create a short test from this text. Number the questions clearly:\n\n${text}`,
         },
       ],
     });
 
     res.status(200).json({
-      result: response.choices[0].message.content,
+      test: response.choices[0].message.content,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 }
-
-
-
